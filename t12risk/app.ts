@@ -111,13 +111,21 @@ class Controller {
         return this.command[num];
     }
 
+    private preformAttack(attacker: Cell, defender: Cell) {
+        defender.updateCell(attacker.team(), attacker.troops() - 1);
+        this.board.changeColor(defender.name(), defender.team());
+    }
+
     private actionEvent(event: string) {
-        this.board.changeColor("a1", "pink")
+        if (event == "a") {
+            this.preformAttack(this.a1, this.a2);
+
+        }
     }
 
     constructor() {
         this.a1 = new Cell("a1", "red", 10);
-        this.a2 = new Cell("a2", "white", 10);
+        this.a2 = new Cell("a2", "yellow", 10);
         this.b1 = new Cell("b1", "blue", 10);
         this.b2 = new Cell("b2", "blue", 10);
 
@@ -137,18 +145,15 @@ class Controller {
     }
 
     action() {
-        setInterval(this.actionEvent(this.fakeCommand()), 3000);
+        setInterval(this.actionEvent(this.fakeCommand()), 30000);
     }
 
-    attack(attacker: Cell, defender: Cell) {
-        defender.updateCell(attacker.team(), attacker.troops() - 1);
-        this.board.changeColor(defender.name(), defender.team());
-    }
+    
 }
 
 window.onload = function () {
     var ctl = new Controller();
-    ctl.attack(ctl.a2, ctl.a1);
+    //ctl.attack(ctl.a2, ctl.a1);
     ctl.action();
 }
 
