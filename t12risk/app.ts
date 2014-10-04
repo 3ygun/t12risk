@@ -1,28 +1,19 @@
-﻿class Greeter {
-    element: HTMLElement;
-    span: HTMLElement;
-    timerToken: number;
-
-    constructor(element: HTMLElement) {
-        this.element = element;
-        this.element.innerHTML += "The time is: ";
-        this.span = document.createElement('span');
-        this.element.appendChild(this.span);
-        this.span.innerText = new Date().toUTCString();
-    }
-
-    start() {
-        this.timerToken = setInterval(() => this.span.innerHTML = new Date().toUTCString(), 500);
-    }
-
-    stop() {
-        clearTimeout(this.timerToken);
-    }
-
+﻿interface CellValues {
+    name: string;
+    team: string;
+    troops: number;
 }
 
-window.onload = () => {
-    var el = document.getElementById('content');
-    var greeter = new Greeter(el);
-    greeter.start();
-};
+/*
+ *  Method that makes a cell!
+ */
+function createCell(propertiesCell: CellValues) {
+    name: propertiesCell.name;
+    team: propertiesCell.team;
+    troops: propertiesCell.troops;
+}
+
+var a1 = createCell({ name: "a1", team: "red", troops: 10 });
+var a2 = createCell({ name: "a2", team: "red", troops: 10 });
+var b1 = createCell({ name: "b1", team: "blue", troops: 10 });
+var b2 = createCell({ name: "b2", team: "blue", troops: 10 });
