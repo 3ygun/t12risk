@@ -38,6 +38,19 @@ var Control = (function () {
     return Control;
 })();
 
+var GameBoard = (function () {
+    function GameBoard() {
+    }
+    return GameBoard;
+})();
+
+window.onload = function () {
+    var a1 = document.getElementById('a1');
+    var a2 = document.getElementById('a2');
+    var b1 = document.getElementById('b1');
+    var b2 = document.getElementById('b2');
+};
+
 var c = new Control();
 console.log(c.a1);
 //# sourceMappingURL=app.js.map
