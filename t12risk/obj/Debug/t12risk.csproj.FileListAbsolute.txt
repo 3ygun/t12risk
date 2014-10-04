@@ -1,0 +1,6 @@
+C:\Users\Chris McManamon\Documents\GitHub\t12risk\t12risk\bin\t12risk.dll.config
+C:\Users\Chris McManamon\Documents\GitHub\t12risk\t12risk\bin\t12risk.dll
+C:\Users\Chris McManamon\Documents\GitHub\t12risk\t12risk\bin\t12risk.pdb
+C:\Users\Chris McManamon\Documents\GitHub\t12risk\t12risk\obj\Debug\t12risk.csprojResolveAssemblyReference.cache
+C:\Users\Chris McManamon\Documents\GitHub\t12risk\t12risk\obj\Debug\t12risk.dll
+C:\Users\Chris McManamon\Documents\GitHub\t12risk\t12risk\obj\Debug\t12risk.pdb
