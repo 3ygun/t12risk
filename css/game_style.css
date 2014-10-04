@@ -1,0 +1,33 @@
+/*
+ * @Authors David Soller, Chris McManamon, Matt Rea, & Kris Wenger
+ */
+body {
+	width: 400px;
+	height: 400px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: black;
+}
+
+.text {
+	text-align: center;
+
+}
+
+.four-square > div {
+	width: 50%;
+	float: left;
+	height: 100px;
+}
+.color-1 {
+	background-color: white;
+}
+.color-2 {
+	background-color: red;
+}
+.color-3 {
+	background-color: green;
+}
+.color-4 {
+	background-color: blue;
+}
