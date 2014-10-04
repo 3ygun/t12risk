@@ -55,6 +55,7 @@ var GameBoard = (function () {
 
 var Controller = (function () {
     function Controller() {
+        this.command = ["a", "b", "c", "d", "e", "f", "g", "h"];
         this.a1 = new Cell("a1", "red", 10);
         this.a2 = new Cell("a2", "white", 10);
         this.b1 = new Cell("b1", "blue", 10);
@@ -68,8 +69,14 @@ var Controller = (function () {
         this.board = new GameBoard(cell_1, cell_2, cell_3, cell_4);
         //Make a twitch object that can return the command to be executed (will be called in action())
     }
+    Controller.prototype.randomNumber = function (upper, lower) {
+        return Math.floor(Math.random() * (upper - lower + 1) + lower);
+    };
+
     Controller.prototype.fakeCommand = function () {
-        return "a";
+        var num = this.randomNumber(7, 0);
+
+        return this.command[num];
     };
 
     Controller.prototype.actionEvent = function (event) {

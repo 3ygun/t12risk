@@ -75,8 +75,16 @@ class Controller {
     b2:Cell;
     board: GameBoard;
 
-    private fakeCommand() {
-        return "a";
+    private command: string[] = ["a", "b", "c", "d", "e", "f", "g", "h"];
+
+    private randomNumber(upper: number, lower: number):number {
+        return Math.floor(Math.random() * (upper - lower + 1) + lower);
+    }
+
+    private fakeCommand(): string {
+        var num = this.randomNumber(7, 0);
+
+        return this.command[num];
     }
 
     private actionEvent(event: string) {
