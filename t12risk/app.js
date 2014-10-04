@@ -30,10 +30,25 @@ var GameBoard = (function () {
         this.b1 = cell3;
         this.b2 = cell4;
     }
-    GameBoard.prototype.changeColor = function (cellName, color) {
+    GameBoard.prototype.getHTMLElement = function (cellName) {
+        var element;
+
         if (cellName == "a1") {
-            this.a1.style.backgroundColor = color;
+            element = this.a1;
+        } else if (cellName == "a2") {
+            element = this.a2;
+        } else if (cellName == "b1") {
+            element = this.b1;
+        } else if (cellName == "b2") {
+            element = this.b2;
         }
+
+        return element;
+    };
+
+    GameBoard.prototype.changeColor = function (cellName, color) {
+        this.getHTMLElement(cellName).style.backgroundColor = color;
+        //this.a1.innerHTML = "<h1>Did it work?</h1>";
     };
     return GameBoard;
 })();

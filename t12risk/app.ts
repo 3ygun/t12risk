@@ -39,6 +39,22 @@ class GameBoard {
     private b1: HTMLElement;
     private b2: HTMLElement;
 
+    private getHTMLElement(cellName: string):HTMLElement {
+        var element: HTMLElement;
+
+        if (cellName == "a1") {
+            element = this.a1;
+        } else if (cellName == "a2") {
+            element = this.a2;
+        } else if (cellName == "b1") {
+            element = this.b1;
+        } else if (cellName == "b2") {
+            element = this.b2;
+        }
+
+        return element;
+    }
+
     constructor(cell1: HTMLElement, cell2: HTMLElement, cell3: HTMLElement, cell4: HTMLElement) {
         this.a1 = cell1;
         this.a2 = cell2;
@@ -47,9 +63,8 @@ class GameBoard {
     }
 
     changeColor(cellName:string, color:string) {
-        if (cellName == "a1") {
-            this.a1.style.backgroundColor = color;
-        }
+        this.getHTMLElement(cellName).style.backgroundColor = color;
+        //this.a1.innerHTML = "<h1>Did it work?</h1>";
     }
 }
 
