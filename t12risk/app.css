@@ -6,11 +6,13 @@ body {
 	height: 400px;
 	margin-left: auto;
 	margin-right: auto;
-	background-color: black;
+	background-image: url("obj/Pictures/map.jpg");
+	background-repeat: repeat-y;
 }
 
 .text {
 	text-align: center;
+	font-color: blue;
 
 }
 
@@ -21,13 +23,17 @@ body {
 }
 .color-1 {
 	background-color: white;
+	font-family: courier;
 }
 .color-2 {
 	background-color: red;
+	font-family: courier;
 }
 .color-3 {
 	background-color: green;
+	font-family: courier;
 }
 .color-4 {
 	background-color: blue;
+	font-family: courier;
 }
