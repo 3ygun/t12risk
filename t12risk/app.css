@@ -6,8 +6,8 @@ body {
 	height: 400px;
 	margin-left: auto;
 	margin-right: auto;
-	background: url("obj/Pictures/map.jpg") no-repeat 100% 100% fixed;
-	background-size: cover;
+	background: url("obj/Pictures/index.jpg") repeat 100% 100% fixed;
+	background-size: contain;
 }
 .text {
 	text-align: center;
