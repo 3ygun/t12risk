@@ -88,7 +88,7 @@ class Controller {
     }
 
     private actionEvent(event: string) {
-        this.board.changeColor("a1", "pink");
+        this.board.changeColor("a1", "pink")
     }
 
     constructor() {
