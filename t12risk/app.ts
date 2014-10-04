@@ -1,5 +1,7 @@
 ﻿interface CellStatic {
-    new (name: string, team: string, troops: number);
+    name: string;
+    team: string;
+    troops: number;
 }
 
 class Cell {
@@ -44,22 +46,25 @@ class GameBoard {
         this.b2 = cell4;
     }
 
-
+    changeColor(cellName:string, color:string) {
+        if (cellName == "a1") {
+            this.a1.style.backgroundColor = color;
+        }
+    }
 }
 
 class Controller {
-    a1;
-    a2;
-    b1;
-    b2;
-    board;
+    a1:Cell;
+    a2:Cell;
+    b1:Cell;
+    b2:Cell;
+    board:GameBoard;
 
     constructor() {
-        var cs: CellStatic = Cell;
-        this.a1 = cs({ name: "a1", team: "red", troops: 10 });
-        this.a2 = cs({ name: "a2", team: "red", troops: 10 });
-        this.b1 = cs({ name: "b1", team: "blue", troops: 10 });
-        this.b2 = cs({ name: "b2", team: "blue", troops: 10 });
+        this.a1 = new Cell("a1", "red", 10);
+        this.a2 = new Cell("a2", "white", 10);
+        this.b1 = new Cell("b1", "blue", 10);
+        this.b2 = new Cell("b2", "blue", 10);
 
         var cell_1 = document.getElementById('a1');
         var cell_2 = document.getElementById('a2');
@@ -71,12 +76,14 @@ class Controller {
 
     attack(attacker: Cell, defender: Cell) {
         //defender.troops = 0;
-        defender.team = attacker.team;
+        defender.updateCell(attacker.team(), attacker.troops()-1);
+        this.board.changeColor(defender.name(), defender.team());        
     }
 }
 
 window.onload = function () {
-    new Controller();
+    var ctl = new Controller();
+    ctl.attack(ctl.a2, ctl.a1);
 }
 
 
