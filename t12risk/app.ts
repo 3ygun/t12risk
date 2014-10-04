@@ -3,7 +3,15 @@
 }
 
 class Cell {
-    constructor(name: string, team: string, troops: number) { }
+    private name;
+    private team;
+    private troops;
+
+    constructor(name: string, team: string, troops: number) {
+        this.name = name;
+        this.team = team;
+        this.troops = troops;
+    }
 }
 
  class Control {

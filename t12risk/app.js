@@ -1,5 +1,8 @@
 ﻿var Cell = (function () {
     function Cell(name, team, troops) {
+        this.name = name;
+        this.team = team;
+        this.troops = troops;
     }
     return Cell;
 })();
