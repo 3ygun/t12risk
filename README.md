@@ -9,7 +9,7 @@ Good evening,
 
 
 **Members:**
-Chris McManamon, The Ohio State University,Second year, Computer Science and Engineering
+Chris McManamon, The Ohio State University, Second year, Computer Science and Engineering
 
 Kris Wenger, The Ohio State University, Second year, Computer Science and Engineering
 
