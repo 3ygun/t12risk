@@ -66,9 +66,21 @@ var Controller = (function () {
         var cell_4 = document.getElementById('b2');
 
         this.board = new GameBoard(cell_1, cell_2, cell_3, cell_4);
+        //Make a twitch object that can return the command to be executed (will be called in action())
     }
+    Controller.prototype.fakeCommand = function () {
+        return "a";
+    };
+
+    Controller.prototype.actionEvent = function (event) {
+        this.board.changeColor("a1", "pink");
+    };
+
+    Controller.prototype.action = function () {
+        setInterval(this.actionEvent(this.fakeCommand()), 3000);
+    };
+
     Controller.prototype.attack = function (attacker, defender) {
-        //defender.troops = 0;
         defender.updateCell(attacker.team(), attacker.troops() - 1);
         this.board.changeColor(defender.name(), defender.team());
     };
@@ -78,5 +90,6 @@ var Controller = (function () {
 window.onload = function () {
     var ctl = new Controller();
     ctl.attack(ctl.a2, ctl.a1);
+    ctl.action();
 };
 //# sourceMappingURL=app.js.map

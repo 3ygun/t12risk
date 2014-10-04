@@ -73,7 +73,15 @@ class Controller {
     a2:Cell;
     b1:Cell;
     b2:Cell;
-    board:GameBoard;
+    board: GameBoard;
+
+    private fakeCommand() {
+        return "a";
+    }
+
+    private actionEvent(event: string) {
+        this.board.changeColor("a1", "pink")
+    }
 
     constructor() {
         this.a1 = new Cell("a1", "red", 10);
@@ -87,10 +95,15 @@ class Controller {
         var cell_4 = document.getElementById('b2');
 
         this.board = new GameBoard(cell_1, cell_2, cell_3, cell_4);
+
+        //Make a twitch object that can return the command to be executed (will be called in action())
+    }
+
+    action() {
+        setInterval(this.actionEvent(this.fakeCommand()), 3000);
     }
 
     attack(attacker: Cell, defender: Cell) {
-        //defender.troops = 0;
         defender.updateCell(attacker.team(), attacker.troops()-1);
         this.board.changeColor(defender.name(), defender.team());        
     }
@@ -99,6 +112,7 @@ class Controller {
 window.onload = function () {
     var ctl = new Controller();
     ctl.attack(ctl.a2, ctl.a1);
+    ctl.action();
 }
 
 
