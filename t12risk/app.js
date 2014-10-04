@@ -23,21 +23,39 @@
     return Cell;
 })();
 
-var Control = (function () {
-    function Control() {
+var GameBoard = (function () {
+    function GameBoard(cell1, cell2, cell3, cell4) {
+        this.a1 = cell1;
+        this.a2 = cell2;
+        this.b1 = cell3;
+        this.b2 = cell4;
+    }
+    return GameBoard;
+})();
+
+var Controller = (function () {
+    function Controller() {
         var cs = Cell;
         this.a1 = cs({ name: "a1", team: "red", troops: 10 });
         this.a2 = cs({ name: "a2", team: "red", troops: 10 });
         this.b1 = cs({ name: "b1", team: "blue", troops: 10 });
         this.b2 = cs({ name: "b2", team: "blue", troops: 10 });
+
+        var cell_1 = document.getElementById('a1');
+        var cell_2 = document.getElementById('a2');
+        var cell_3 = document.getElementById('b1');
+        var cell_4 = document.getElementById('b2');
+
+        this.board = new GameBoard(cell_1, cell_2, cell_3, cell_4);
     }
-    Control.prototype.attack = function (attacker, defender) {
+    Controller.prototype.attack = function (attacker, defender) {
         //defender.troops = 0;
         defender.team = attacker.team;
     };
-    return Control;
+    return Controller;
 })();
 
-var c = new Control();
-console.log(c.a1);
+window.onload = function () {
+    new Controller();
+};
 //# sourceMappingURL=app.js.map
