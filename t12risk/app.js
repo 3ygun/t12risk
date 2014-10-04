@@ -108,7 +108,7 @@ var Controller = (function () {
     };
 
     Controller.prototype.action = function () {
-        setInterval(this.actionEvent(this.fakeCommand()), 3000);
+        setInterval(this.actionEvent(this.fakeCommand()), 30000);
     };
 
     Controller.prototype.attack = function (attacker, defender) {
