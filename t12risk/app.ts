@@ -48,6 +48,10 @@ class Control {
     }
 }
 
+class GameBoard {
+    
+}
+
 var c = new Control();
 console.log(c.a1);
 

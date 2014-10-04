@@ -38,6 +38,12 @@ var Control = (function () {
     return Control;
 })();
 
+var GameBoard = (function () {
+    function GameBoard() {
+    }
+    return GameBoard;
+})();
+
 var c = new Control();
 console.log(c.a1);
 //# sourceMappingURL=app.js.map
