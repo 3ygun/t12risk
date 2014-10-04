@@ -76,7 +76,7 @@ var Controller = (function () {
     function Controller() {
         this.command = ["a", "b", "c", "d", "e", "f", "g", "h"];
         this.a1 = new Cell("a1", "red", 10);
-        this.a2 = new Cell("a2", "white", 10);
+        this.a2 = new Cell("a2", "yellow", 10);
         this.b1 = new Cell("b1", "blue", 10);
         this.b2 = new Cell("b2", "blue", 10);
 
@@ -103,24 +103,27 @@ var Controller = (function () {
         return this.command[num];
     };
 
+    Controller.prototype.preformAttack = function (attacker, defender) {
+        defender.updateCell(attacker.team(), attacker.troops() - 1);
+        this.board.changeColor(defender.name(), defender.team());
+    };
+
     Controller.prototype.actionEvent = function (event) {
-        this.board.changeColor("a1", "pink");
+        if (event == "a") {
+            this.preformAttack(this.a1, this.a2);
+        }
     };
 
     Controller.prototype.action = function () {
-        setInterval(this.actionEvent(this.fakeCommand()), 3000);
-    };
-
-    Controller.prototype.attack = function (attacker, defender) {
-        defender.updateCell(attacker.team(), attacker.troops() - 1);
-        this.board.changeColor(defender.name(), defender.team());
+        setInterval(this.actionEvent(this.fakeCommand()), 30000);
     };
     return Controller;
 })();
 
 window.onload = function () {
     var ctl = new Controller();
-    ctl.attack(ctl.a2, ctl.a1);
+
+    //ctl.attack(ctl.a2, ctl.a1);
     ctl.action();
 };
 //# sourceMappingURL=app.js.map
