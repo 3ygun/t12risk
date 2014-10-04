@@ -21,8 +21,11 @@ class Cell {
         return this.troopsVal;
     }
 
-    updateCell(team: string, troops: number) {
+    updateTeam(team: string) {
         this.teamVal = team;
+    }
+
+    updateTroops(troops: number) {
         this.troopsVal = troops;
     }
 
@@ -111,9 +114,24 @@ class Controller {
         return this.command[num];
     }
 
-    private preformAttack(attacker: Cell, defender: Cell) {
-        defender.updateCell(attacker.team(), attacker.troops() - 1);
+    private preformAttack(attacker: Cell, defender: Cell): string {
+        var winner: string;
+        while (attacker.troops() > 1 && defender.troops() > 0) {
+            var attackerRoll = this.randomNumber(6, 1);
+            var defenderRoll = this.randomNumber(6, 1);
+
+            if (defenderRoll >= attackerRoll) {
+                attacker.updateTroops(attacker.troops() - 1);
+                winner = defender.team();
+            } else {
+                defender.updateTroops(defender.troops() - 1);
+                winner = attacker.team();
+            }
+        }
+
         this.board.changeColor(defender.name(), defender.team());
+
+        return winner;
     }
 
     private actionEvent(event: string) {

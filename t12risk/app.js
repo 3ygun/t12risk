@@ -16,8 +16,11 @@
         return this.troopsVal;
     };
 
-    Cell.prototype.updateCell = function (team, troops) {
+    Cell.prototype.updateTeam = function (team) {
         this.teamVal = team;
+    };
+
+    Cell.prototype.updateTroops = function (troops) {
         this.troopsVal = troops;
     };
     return Cell;
@@ -104,8 +107,23 @@ var Controller = (function () {
     };
 
     Controller.prototype.preformAttack = function (attacker, defender) {
-        defender.updateCell(attacker.team(), attacker.troops() - 1);
+        var winner;
+        while (attacker.troops() > 1 && defender.troops() > 0) {
+            var attackerRoll = this.randomNumber(6, 1);
+            var defenderRoll = this.randomNumber(6, 1);
+
+            if (defenderRoll >= attackerRoll) {
+                attacker.updateTroops(attacker.troops() - 1);
+                winner = defender.team();
+            } else {
+                defender.updateTroops(defender.troops() - 1);
+                winner = attacker.team();
+            }
+        }
+
         this.board.changeColor(defender.name(), defender.team());
+
+        return winner;
     };
 
     Controller.prototype.actionEvent = function (event) {
