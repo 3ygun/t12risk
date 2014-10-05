@@ -47,6 +47,8 @@ class GameBoard {
     private b1tnum: HTMLElement;
     private b2tnum: HTMLElement;
 
+    private gameStatsElement: HTMLElement;
+
     private getHTMLElement(elementName: string): HTMLElement {
         var element: HTMLElement;
 
@@ -69,6 +71,8 @@ class GameBoard {
         } else if (elementName == "b2_tnum") {
             element = this.b2tnum;
         }
+
+        // Currently we do not have "game_stats" as a thing here
 
         return element;
     }
@@ -97,7 +101,11 @@ class GameBoard {
     }
 
     updateTroops(idName: string, troops: number) {
-        this.getHTMLElement(idName).innerHTML = "" + troops;
+        this.getHTMLElement(idName).innerText = "" + troops;
+    }
+
+    gameStats() {
+        this.gameStatsElement.innerText = "<h3>Last Game:</h3> <h4>" + "</h4>";
     }
 }
 
@@ -130,6 +138,20 @@ class Controller {
         }
 
         return isWinner;
+    }
+
+    private resetGame() {
+        this.cells.get("a1").updateTeam("red");
+        this.cells.get("a2").updateTeam("green");
+        this.cells.get("b1").updateTeam("green");
+        this.cells.get("b2").updateTeam("blue");
+
+        this.cells.get("a1").updateTroops(10);
+        this.cells.get("a2").updateTroops(10);
+        this.cells.get("b1").updateTroops(10);
+        this.cells.get("b2").updateTroops(10);
+
+        this.board = new GameBoard(this.cells);
     }
 
     private preformAttack(attacker: Cell, defender: Cell): boolean {
@@ -214,7 +236,12 @@ class Controller {
     }
 
     action() {
-        this.actionEvent(this.fakeCommand());
+        if (!this.endGame()) {
+            this.actionEvent(this.fakeCommand());
+        } else {
+            this.board.gameStats();
+            this.resetGame();
+        }
     }
 }
 

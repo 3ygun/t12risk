@@ -67,6 +67,7 @@ var GameBoard = (function () {
             element = this.b2tnum;
         }
 
+        // Currently we do not have "game_stats" as a thing here
         return element;
     };
 
@@ -76,7 +77,11 @@ var GameBoard = (function () {
     };
 
     GameBoard.prototype.updateTroops = function (idName, troops) {
-        this.getHTMLElement(idName).innerHTML = "" + troops;
+        this.getHTMLElement(idName).innerText = "" + troops;
+    };
+
+    GameBoard.prototype.gameStats = function () {
+        this.gameStatsElement.innerText = "<h3>Last Game:</h3> <h4>" + "</h4>";
     };
     return GameBoard;
 })();
@@ -116,6 +121,20 @@ var Controller = (function () {
         }
 
         return isWinner;
+    };
+
+    Controller.prototype.resetGame = function () {
+        this.cells.get("a1").updateTeam("red");
+        this.cells.get("a2").updateTeam("green");
+        this.cells.get("b1").updateTeam("green");
+        this.cells.get("b2").updateTeam("blue");
+
+        this.cells.get("a1").updateTroops(10);
+        this.cells.get("a2").updateTroops(10);
+        this.cells.get("b1").updateTroops(10);
+        this.cells.get("b2").updateTroops(10);
+
+        this.board = new GameBoard(this.cells);
     };
 
     Controller.prototype.preformAttack = function (attacker, defender) {
@@ -187,7 +206,12 @@ var Controller = (function () {
     };
 
     Controller.prototype.action = function () {
-        this.actionEvent(this.fakeCommand());
+        if (!this.endGame()) {
+            this.actionEvent(this.fakeCommand());
+        } else {
+            this.board.gameStats();
+            this.resetGame();
+        }
     };
     return Controller;
 })();
