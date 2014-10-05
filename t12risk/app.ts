@@ -47,6 +47,8 @@ class GameBoard {
     private b1tnum: HTMLElement;
     private b2tnum: HTMLElement;
 
+    private deathCountVal: number;
+    private attackCountVal: number;
     private gameStatsElement: HTMLElement;
 
     private getHTMLElement(elementName: string): HTMLElement {
@@ -78,6 +80,10 @@ class GameBoard {
     }
 
     constructor(cells: Map<string, Cell>) {
+        this.deathCountVal = 0;
+        this.attackCountVal = 0;
+        this.gameStatsElement = document.getElementById("game_stats");
+
         this.a1 = document.getElementById("a1");
         this.a2 = document.getElementById("a2");
         this.b1 = document.getElementById("b1");
@@ -102,6 +108,14 @@ class GameBoard {
 
     updateTroops(idName: string, troops: number) {
         this.getHTMLElement(idName).innerText = "" + troops;
+    }
+
+    incrementDC() {
+        this.deathCountVal++;
+    }
+
+    incrementAC() {
+        this.attackCountVal++;
     }
 
     gameStats() {
@@ -156,6 +170,8 @@ class Controller {
 
     private preformAttack(attacker: Cell, defender: Cell): boolean {
         var success: boolean;
+        this.board.incrementAC();
+
         while (attacker.troops() > 1 && defender.troops() > 0) {
             var attackerRoll = this.randomNumber(6, 1);
             var defenderRoll = this.randomNumber(6, 1);
@@ -167,6 +183,7 @@ class Controller {
                 defender.updateTroops(defender.troops() - 1);
                 success = true;
             }
+            this.board.incrementDC();
         }
         return success;
     }
@@ -248,9 +265,7 @@ class Controller {
 window.onload = function () {
     var ctl = new Controller();
     //ctl.attack(ctl.a2, ctl.a1);
-    while (ctl.endGame()) {
-        setTimeout(function () { ctl.action() }, 2000);
-    }
+    setInterval(function () { ctl.action() }, 2000);
 }
 
 
