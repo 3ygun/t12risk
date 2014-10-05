@@ -48,8 +48,9 @@ class GameBoard {
     private b2tnum: HTMLElement;
 
     private deathCountVal: number;
-    private attackCountVal: number;
+    private turnCountVal: number;
     private gameStatsElement: HTMLElement;
+    private totalLossesElement: HTMLElement;
 
     private getHTMLElement(elementName: string): HTMLElement {
         var element: HTMLElement;
@@ -81,8 +82,9 @@ class GameBoard {
 
     constructor(cells: Map<string, Cell>) {
         this.deathCountVal = 0;
-        this.attackCountVal = 0;
+        this.turnCountVal = 0;
         this.gameStatsElement = document.getElementById("game_stats");
+        this.totalLossesElement = document.getElementById("total_losses");
 
         this.a1 = document.getElementById("a1");
         this.a2 = document.getElementById("a2");
@@ -115,21 +117,27 @@ class GameBoard {
     }
 
     incrementAC() {
-        this.attackCountVal++;
+        this.turnCountVal++;
     }
 
-    gameStats() {
-        this.gameStatsElement.innerText = "<h3>Last Game:</h3> <h4>" + "</h4>";
+    gameStats(tLosses: number) {
+        this.totalLossesElement.innerHTML = "<h4>Total Losses: " + tLosses + "</h4>";
+        this.gameStatsElement.innerHTML = "<h3>Last Game:</h3> <h4>" + this.deathCountVal + " dead in " + this.turnCountVal + " turns</h4>";
+    }
+
+    troopLosses(): number {
+        return this.deathCountVal;
     }
 }
 
 class Controller {
     cells: Map<string, Cell>;
     board: GameBoard;
+    totalLosses: number;
 
     private command: string[] = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
-    private randomNumber(upper: number, lower: number):number {
+    private randomNumber(upper: number, lower: number): number {
         return Math.floor(Math.random() * (upper - lower + 1) + lower);
     }
 
@@ -248,6 +256,7 @@ class Controller {
         this.cells.set("b2", new Cell("b2", "blue", 10));
 
         this.board = new GameBoard(this.cells);
+        this.totalLosses = 0;
 
         //Make a twitch object that can return the command to be executed (will be called in action())
     }
@@ -256,7 +265,8 @@ class Controller {
         if (!this.endGame()) {
             this.actionEvent(this.fakeCommand());
         } else {
-            this.board.gameStats();
+            this.totalLosses = this.totalLosses + this.board.troopLosses();
+            this.board.gameStats(this.totalLosses);
             this.resetGame();
         }
     }
@@ -265,7 +275,7 @@ class Controller {
 window.onload = function () {
     var ctl = new Controller();
     //ctl.attack(ctl.a2, ctl.a1);
-    setInterval(function () { ctl.action() }, 2000);
+    setInterval(function () { ctl.action() }, 500);
 }
 
 

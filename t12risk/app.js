@@ -29,8 +29,9 @@
 var GameBoard = (function () {
     function GameBoard(cells) {
         this.deathCountVal = 0;
-        this.attackCountVal = 0;
+        this.turnCountVal = 0;
         this.gameStatsElement = document.getElementById("game_stats");
+        this.totalLossesElement = document.getElementById("total_losses");
 
         this.a1 = document.getElementById("a1");
         this.a2 = document.getElementById("a2");
@@ -89,11 +90,16 @@ var GameBoard = (function () {
     };
 
     GameBoard.prototype.incrementAC = function () {
-        this.attackCountVal++;
+        this.turnCountVal++;
     };
 
-    GameBoard.prototype.gameStats = function () {
-        this.gameStatsElement.innerText = "<h3>Last Game:</h3> <h4>" + "</h4>";
+    GameBoard.prototype.gameStats = function (tLosses) {
+        this.totalLossesElement.innerHTML = "<h4>Total Losses: " + tLosses + "</h4>";
+        this.gameStatsElement.innerHTML = "<h3>Last Game:</h3> <h4>" + this.deathCountVal + " dead in " + this.turnCountVal + " turns</h4>";
+    };
+
+    GameBoard.prototype.troopLosses = function () {
+        return this.deathCountVal;
     };
     return GameBoard;
 })();
@@ -108,6 +114,7 @@ var Controller = (function () {
         this.cells.set("b2", new Cell("b2", "blue", 10));
 
         this.board = new GameBoard(this.cells);
+        this.totalLosses = 0;
         //Make a twitch object that can return the command to be executed (will be called in action())
     }
     Controller.prototype.randomNumber = function (upper, lower) {
@@ -224,7 +231,8 @@ var Controller = (function () {
         if (!this.endGame()) {
             this.actionEvent(this.fakeCommand());
         } else {
-            this.board.gameStats();
+            this.totalLosses = this.totalLosses + this.board.troopLosses();
+            this.board.gameStats(this.totalLosses);
             this.resetGame();
         }
     };
@@ -237,6 +245,6 @@ window.onload = function () {
     //ctl.attack(ctl.a2, ctl.a1);
     setInterval(function () {
         ctl.action();
-    }, 2000);
+    }, 500);
 };
 //# sourceMappingURL=app.js.map
