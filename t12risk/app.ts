@@ -193,14 +193,16 @@ class Controller {
     }
 
     action() {
-        setInterval(this.actionEvent(this.fakeCommand()), 30000);
+        this.actionEvent(this.fakeCommand());
     }
 }
 
 window.onload = function () {
     var ctl = new Controller();
     //ctl.attack(ctl.a2, ctl.a1);
-    ctl.action();
+    while (ctl.endGame()) {
+        setTimeout(function () { ctl.action() }, 2000);
+    }
 }
 
 

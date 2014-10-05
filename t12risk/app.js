@@ -166,7 +166,7 @@ var Controller = (function () {
     };
 
     Controller.prototype.action = function () {
-        setInterval(this.actionEvent(this.fakeCommand()), 30000);
+        this.actionEvent(this.fakeCommand());
     };
     return Controller;
 })();
@@ -174,7 +174,10 @@ var Controller = (function () {
 window.onload = function () {
     var ctl = new Controller();
 
-    //ctl.attack(ctl.a2, ctl.a1);
-    ctl.action();
+    while (ctl.endGame()) {
+        setTimeout(function () {
+            ctl.action();
+        }, 2000);
+    }
 };
 //# sourceMappingURL=app.js.map
