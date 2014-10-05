@@ -27,7 +27,7 @@
 })();
 
 var GameBoard = (function () {
-    function GameBoard() {
+    function GameBoard(cells) {
         this.a1 = document.getElementById('a1');
         this.a2 = document.getElementById('a2');
         this.b1 = document.getElementById('b1');
@@ -37,6 +37,12 @@ var GameBoard = (function () {
         this.a2tnum = document.getElementById('a2_tnum');
         this.b1tnum = document.getElementById('b1_tnum');
         this.b2tnum = document.getElementById('b2_tnum');
+
+        // Set the colors
+        this.a1.style.backgroundColor = cells.get('a1').team();
+        this.a2.style.backgroundColor = cells.get('a2').team();
+        this.b1.style.backgroundColor = cells.get('b1').team();
+        this.b2.style.backgroundColor = cells.get('b2').team();
     }
     GameBoard.prototype.getHTMLElement = function (elementName) {
         var element;
@@ -80,11 +86,11 @@ var Controller = (function () {
         this.command = ["a", "b", "c", "d", "e", "f", "g", "h"];
         this.cells = new Map();
         this.cells.set("a1", new Cell("a1", "red", 10));
-        this.cells.set("a2", new Cell("a2", "yellow", 10));
-        this.cells.set("b1", new Cell("b1", "blue", 10));
+        this.cells.set("a2", new Cell("a2", "green", 10));
+        this.cells.set("b1", new Cell("b1", "green", 10));
         this.cells.set("b2", new Cell("b2", "blue", 10));
 
-        this.board = new GameBoard();
+        this.board = new GameBoard(this.cells);
         //Make a twitch object that can return the command to be executed (will be called in action())
     }
     Controller.prototype.randomNumber = function (upper, lower) {
@@ -98,23 +104,20 @@ var Controller = (function () {
     };
 
     Controller.prototype.preformAttack = function (attacker, defender) {
-        var winner;
+        var success;
         while (attacker.troops() > 1 && defender.troops() > 0) {
             var attackerRoll = this.randomNumber(6, 1);
             var defenderRoll = this.randomNumber(6, 1);
 
             if (defenderRoll >= attackerRoll) {
                 attacker.updateTroops(attacker.troops() - 1);
-                winner = defender.team();
+                success = false;
             } else {
                 defender.updateTroops(defender.troops() - 1);
-                winner = attacker.team();
+                success = true;
             }
         }
-
-        this.board.changeColor(defender.name(), defender.team());
-
-        return winner;
+        return success;
     };
 
     Controller.prototype.actionEvent = function (event) {
