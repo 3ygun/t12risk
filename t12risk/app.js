@@ -82,7 +82,7 @@ var GameBoard = (function () {
     };
 
     GameBoard.prototype.updateTroops = function (idName, troops) {
-        this.getHTMLElement(idName).innerText = "" + troops;
+        this.getHTMLElement(idName).innerHTML = "<h2>" + idName.toLocaleUpperCase() + "</h2> <h3>" + troops + "</h3>";
     };
 
     GameBoard.prototype.incrementDC = function () {
@@ -110,8 +110,8 @@ var Controller = (function () {
         this.cells = new Map();
         this.cells.set("a1", new Cell("a1", "red", 10));
         this.cells.set("a2", new Cell("a2", "green", 10));
-        this.cells.set("b1", new Cell("b1", "green", 10));
-        this.cells.set("b2", new Cell("b2", "blue", 10));
+        this.cells.set("b1", new Cell("b1", "blue", 10));
+        this.cells.set("b2", new Cell("b2", "yellow", 10));
 
         this.board = new GameBoard(this.cells);
         this.totalLosses = 0;
@@ -145,8 +145,8 @@ var Controller = (function () {
     Controller.prototype.resetGame = function () {
         this.cells.get("a1").updateTeam("red");
         this.cells.get("a2").updateTeam("green");
-        this.cells.get("b1").updateTeam("green");
-        this.cells.get("b2").updateTeam("blue");
+        this.cells.get("b1").updateTeam("blue");
+        this.cells.get("b2").updateTeam("yellow");
 
         this.cells.get("a1").updateTroops(10);
         this.cells.get("a2").updateTroops(10);

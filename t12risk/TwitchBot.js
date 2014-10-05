@@ -12,14 +12,13 @@ var file = process.argv[2];
 var possibleGuesses = new Map();
 
 var config = {
-    channels: ["#osuosc-hangman", " #cwdg", "#hangman"],
-    server: "irc.freenode.net",
-    botName: "Hangman-Botman"
+    channels: "#twitchplaysrisk",
+    server: "irc.twitch.tv",
+    botName: "RiskBotman",
+    password: "oauth:c63mmqbsaev5tqqhnm1rflcaihbld3"
 };
 
-var bot = new irc.Client(config.server, config.botName, {
-    channels: config.channels
-});
+var bot = new irc.Client(config.server, config.botName, config.channels, config.password);
 
 var game = {};
 var word = {};
