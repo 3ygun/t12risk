@@ -9,6 +9,8 @@ var fs = require('fs');
 
 var file = process.argv[2];
 
+var possibleGuesses = new Map();
+
 var config = {
     channels: ["#osuosc-hangman", " #cwdg", "#hangman"],
     server: "irc.freenode.net",
@@ -24,6 +26,20 @@ var word = {};
 var completedWord = {};
 var lettersTried = {};
 var manState = {};
+
+var count = (function () {
+    function count(num) {
+        this.numVal = num;
+    }
+    count.prototype.getNum = function () {
+        return this.numVal;
+    };
+
+    count.prototype.updateNum = function (num) {
+        this.numVal = this.numVal + num;
+    };
+    return count;
+})();
 
 for (var i = 0; i < config.channels.length; i++) {
     var channel = config.channels[i];
@@ -95,81 +111,98 @@ var wrongGuess = function (channel) {
 };
 
 bot.addListener("message", function (from, to, text, message) {
-    if (text.toLowerCase().substring(0, 14) == '.start hangman') {
-        if (!game[to]) chooseWord(to);
-        else bot.say(to, "A game is already occurring!");
-    }
-});
-
-bot.addListener("message", function (from, to, text, message) {
-    if (text.toLowerCase().substring(0, 7) == '.guess ') {
-        if (game[to]) {
-            var letter = text[7];
-            if (lettersTried[to].indexOf(letter) > -1) {
-                bot.say(to, "This letter has already been guessed.");
-            } else if (!letter.match(/[a-z]/)) {
-                bot.say(to, "That is not a valid character");
-            } else {
-                if (word[to].indexOf(letter) > -1) {
-                    for (var i = 0; i < word[to].length; i++) {
-                        if (word[to][i] == letter) {
-                            console.log(i);
-                            console.log(completedWord[to]);
-                            completedWord[to] = setCharAt(completedWord[to], i, letter);
-                            console.log(completedWord[to]);
-                        }
-                    }
-                    if (completedWord[to] == word[to]) {
-                        bot.say(to, "You win! The word is " + word[to]);
-                        game[to] = false;
-                    } else {
-                        console.log(completedWord[to]);
-                        bot.say(to, completedWord[to].split('').join(' '));
-                    }
-                } else {
-                    wrongGuess(to);
-                }
-                lettersTried[to].push(letter);
-            }
-        }
-        else {
-            bot.say(to, "There is no currently active game");
-        }
-    }
-});
-
-bot.addListener("message", function (from, to, text, message) {
-    if (text.toLowerCase().substring(0, 10) == ".guessword") {
-        if (game[to]) {
-            var guess = text.substring(11);
-            if (guess == word[to]) {
-                bot.say(to, "You win! The word is " + word[to]);
-                game[to] = false;
-            } else {
-                wrongGuess(to);
-            }
+    if (text.toLowerCase().substring(0, 1) == 'a') {
+        if (!(this.possibleGuesses.has('a'))) {
+            this.possibleGuesses.set('a', count(1));
         } else {
-            bot.say(to, "There is no currently active game");
+            var cnt = this.possibleGuesses.get('a');
+            this.possibleGuesses.delete('a');
+            this.possibleGuesses.set('a', count(cnt+1));
         }
     }
 });
 
 bot.addListener("message", function (from, to, text, message) {
-    if (text.toLowerCase().substring(0, 8) == ".letters") {
-        var letterPool = "abcdefghijklmnopqrstuvwxyz";
-        for (var i = 0; i < lettersTried[to].length; i++) {
-            if (letterPool.indexOf(lettersTried[to][i]) > -1) {
-                letterPool = setCharAt(letterPool, letterPool.indexOf(lettersTried[to][i]), '_');
-            }
+    if (text.toLowerCase().substring(0, 1) == 'b') {
+        if (!(this.possibleGuesses.has('b'))) {
+            this.possibleGuesses.set('b', count(1));
+        } else {
+            var cnt = this.possibleGuesses.get('b');
+            this.possibleGuesses.delete('b');
+            this.possibleGuesses.set('b', count(cnt + 1));
         }
-        bot.say(to, letterPool);
     }
 });
 
 bot.addListener("message", function (from, to, text, message) {
-    if (text.toLowerCase().substring(0, 7) == ".status") {
-        drawHangman(to);
-        bot.say(to, completedWord[to].split('').join(' '));
+    if (text.toLowerCase().substring(0, 1) == 'c') {
+        if (!(this.possibleGuesses.has('c'))) {
+            this.possibleGuesses.set('c', count(1));
+        } else {
+            var cnt = this.possibleGuesses.get('c');
+            this.possibleGuesses.delete('c');
+            this.possibleGuesses.set('c', count(cnt + 1));
+        }
+    }
+});
+
+bot.addListener("message", function (from, to, text, message) {
+    if (text.toLowerCase().substring(0, 1) == 'd') {
+        if (!(this.possibleGuesses.has('d'))) {
+            this.possibleGuesses.set('d', count(1));
+        } else {
+            var cnt = this.possibleGuesses.get('d');
+            this.possibleGuesses.delete('d');
+            this.possibleGuesses.set('d', count(cnt + 1));
+        }
+    }
+});
+
+bot.addListener("message", function (from, to, text, message) {
+    if (text.toLowerCase().substring(0, 1) == 'e') {
+        if (!(this.possibleGuesses.has('e'))) {
+            this.possibleGuesses.set('e', count(1));
+        } else {
+            var cnt = this.possibleGuesses.get('e');
+            this.possibleGuesses.delete('e');
+            this.possibleGuesses.set('e', count(cnt + 1));
+        }
+    }
+});
+
+bot.addListener("message", function (from, to, text, message) {
+    if (text.toLowerCase().substring(0, 1) == 'f') {
+        if (!(this.possibleGuesses.has('f'))) {
+            this.possibleGuesses.set('f', count(1));
+        } else {
+            var cnt = this.possibleGuesses.get('f');
+            this.possibleGuesses.delete('f');
+            this.possibleGuesses.set('f', count(cnt + 1));
+        }
+    }
+});
+
+bot.addListener("message", function (from, to, text, message) {
+    if (text.toLowerCase().substring(0, 1) == 'g') {
+        if (!(this.possibleGuesses.has('g'))) {
+            this.possibleGuesses.set('g', count(1));
+        } else {
+            var cnt = this.possibleGuesses.get('g');
+            this.possibleGuesses.delete('g');
+            this.possibleGuesses.set('g', count(cnt + 1));
+        }
+    }
+});
+
+bot.addListener("message", function (from, to, text, message) {
+    if (text.toLowerCase().substring(0, 1) == 'h') {
+        if (!(this.possibleGuesses.has('h'))) {
+            this.possibleGuesses.set('h', count(1));
+        } else {
+            var cnt = this.possibleGuesses.get('h');
+            this.possibleGuesses.delete('h');
+            this.possibleGuesses.set('h', count(cnt + 1));
+        }
     }
 });
 
