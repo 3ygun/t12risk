@@ -20,7 +20,7 @@
 	<li>The Ohio State University</li>
 	<li>Second year</li>
 	<li>(CSE) Computer Science and Engineering</li> 
-	<li><a href="davidsoller.me">davidsoller.me</a></li>
+	<li><a href="http://davidsoller.me">davidsoller.me</a></li>
 </ul>
 
 <h3>Kris Wenger</h3>
