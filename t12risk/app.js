@@ -27,16 +27,16 @@
 })();
 
 var GameBoard = (function () {
-    function GameBoard(cell1, cell2, cell3, cell4, cell1tnum, cell2tnum, cell3tnum, cell4tnum) {
-        this.a1 = cell1;
-        this.a2 = cell2;
-        this.b1 = cell3;
-        this.b2 = cell4;
+    function GameBoard() {
+        this.a1 = document.getElementById('a1');
+        this.a2 = document.getElementById('a2');
+        this.b1 = document.getElementById('b1');
+        this.b2 = document.getElementById('b2');
 
-        this.a1tnum = cell1tnum;
-        this.a2tnum = cell2tnum;
-        this.b1tnum = cell3tnum;
-        this.b2tnum = cell4tnum;
+        this.a1tnum = document.getElementById('a1_tnum');
+        this.a2tnum = document.getElementById('a2_tnum');
+        this.b1tnum = document.getElementById('b1_tnum');
+        this.b2tnum = document.getElementById('b2_tnum');
     }
     GameBoard.prototype.getHTMLElement = function (elementName) {
         var element;
@@ -64,12 +64,12 @@ var GameBoard = (function () {
         return element;
     };
 
-    GameBoard.prototype.changeColor = function (idName, color) {
+    GameBoard.prototype.updateColor = function (idName, color) {
         this.getHTMLElement(idName).style.backgroundColor = color;
         //this.a1.innerHTML = "<h1>Did it work?</h1>";
     };
 
-    GameBoard.prototype.changeTroops = function (idName, troops) {
+    GameBoard.prototype.updateTroops = function (idName, troops) {
         this.getHTMLElement(idName).innerHTML = "" + troops;
     };
     return GameBoard;
@@ -78,22 +78,13 @@ var GameBoard = (function () {
 var Controller = (function () {
     function Controller() {
         this.command = ["a", "b", "c", "d", "e", "f", "g", "h"];
-        this.a1 = new Cell("a1", "red", 10);
-        this.a2 = new Cell("a2", "yellow", 10);
-        this.b1 = new Cell("b1", "blue", 10);
-        this.b2 = new Cell("b2", "blue", 10);
+        this.cells = new Map();
+        this.cells.set("a1", new Cell("a1", "red", 10));
+        this.cells.set("a2", new Cell("a2", "yellow", 10));
+        this.cells.set("b1", new Cell("b1", "blue", 10));
+        this.cells.set("b2", new Cell("b2", "blue", 10));
 
-        var cell_1 = document.getElementById('a1');
-        var cell_2 = document.getElementById('a2');
-        var cell_3 = document.getElementById('b1');
-        var cell_4 = document.getElementById('b2');
-
-        var cell_1_tnum = document.getElementById('a1_tnum');
-        var cell_2_tnum = document.getElementById('a2_tnum');
-        var cell_3_tnum = document.getElementById('b1_tnum');
-        var cell_4_tnum = document.getElementById('b2_tnum');
-
-        this.board = new GameBoard(cell_1, cell_2, cell_3, cell_4, cell_1_tnum, cell_2_tnum, cell_3_tnum, cell_4_tnum);
+        this.board = new GameBoard();
         //Make a twitch object that can return the command to be executed (will be called in action())
     }
     Controller.prototype.randomNumber = function (upper, lower) {
@@ -124,6 +115,51 @@ var Controller = (function () {
         this.board.changeColor(defender.name(), defender.team());
 
         return winner;
+    };
+
+    Controller.prototype.actionEvent = function (event) {
+        var attacker;
+        var defender;
+
+        if (event == "a") {
+            attacker = this.cells.get("a1");
+            defender = this.cells.get("a2");
+        } else if (event == "b") {
+            attacker = this.cells.get("a2");
+            defender = this.cells.get("b2");
+        } else if (event == "c") {
+            attacker = this.cells.get("b2");
+            defender = this.cells.get("b1");
+        } else if (event == "d") {
+            attacker = this.cells.get("b1");
+            defender = this.cells.get("a1");
+        } else if (event == "e") {
+            attacker = this.cells.get("a2");
+            defender = this.cells.get("a1");
+        } else if (event == "f") {
+            attacker = this.cells.get("b2");
+            defender = this.cells.get("a2");
+        } else if (event == "g") {
+            attacker = this.cells.get("b1");
+            defender = this.cells.get("b2");
+        } else if (event == "h") {
+            attacker = this.cells.get("a1");
+            defender = this.cells.get("b1");
+        } else {
+            attacker = this.cells.get("a1");
+            defender = this.cells.get("a2");
+        }
+
+        var aWin = this.preformAttack(attacker, defender);
+        if (aWin) {
+            defender.updateTeam(attacker.team());
+            defender.updateTroops(attacker.troops() - 1);
+            attacker.updateTroops(1);
+            this.board.updateColor(defender.name(), defender.team());
+        }
+
+        this.board.updateTroops(attacker.name(), attacker.troops());
+        this.board.updateTroops(defender.name(), defender.troops());
     };
 
     Controller.prototype.action = function () {
