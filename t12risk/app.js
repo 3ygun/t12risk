@@ -28,6 +28,9 @@
 
 var GameBoard = (function () {
     function GameBoard(cells) {
+        this.deathCountVal = 0;
+        this.attackCountVal = 0;
+
         this.a1 = document.getElementById("a1");
         this.a2 = document.getElementById("a2");
         this.b1 = document.getElementById("b1");
@@ -78,6 +81,14 @@ var GameBoard = (function () {
     GameBoard.prototype.updateTroops = function (idName, troops) {
         this.getHTMLElement(idName).innerHTML = "" + troops;
     };
+
+    GameBoard.prototype.incrementDC = function () {
+        this.deathCountVal++;
+    };
+
+    GameBoard.prototype.incrementAC = function () {
+        this.attackCountVal++;
+    };
     return GameBoard;
 })();
 
@@ -103,23 +114,9 @@ var Controller = (function () {
         return this.command[num];
     };
 
-    Controller.prototype.endGame = function () {
-        var isWinner = false;
-        var aTeam = this.cells.get("a1").team();
-
-        if (aTeam == this.cells.get("a2").team()) {
-            if (aTeam == this.cells.get("b1").team()) {
-                if (aTeam == this.cells.get("b2").team()) {
-                    isWinner = true;
-                }
-            }
-        }
-
-        return isWinner;
-    };
-
     Controller.prototype.preformAttack = function (attacker, defender) {
         var success;
+        this.board.incrementAC();
         while (attacker.troops() > 1 && defender.troops() > 0) {
             var attackerRoll = this.randomNumber(6, 1);
             var defenderRoll = this.randomNumber(6, 1);
@@ -131,6 +128,7 @@ var Controller = (function () {
                 defender.updateTroops(defender.troops() - 1);
                 success = true;
             }
+            this.board.incrementDC();
         }
         return success;
     };
@@ -186,6 +184,20 @@ var Controller = (function () {
         }
     };
 
+    Controller.prototype.endGame = function () {
+        var isWinner = false;
+
+        if (this.cells.get("a1").team() === this.cells.get("a2").team()) {
+            if (this.cells.get("a1").team() === this.cells.get("b1").team()) {
+                if (this.cells.get("a1").team() === this.cells.get("b2").team()) {
+                    isWinner = true;
+                }
+            }
+        }
+
+        return isWinner;
+    };
+
     Controller.prototype.action = function () {
         this.actionEvent(this.fakeCommand());
     };
@@ -195,10 +207,9 @@ var Controller = (function () {
 window.onload = function () {
     var ctl = new Controller();
 
-    while (ctl.endGame()) {
-        setTimeout(function () {
-            ctl.action();
-        }, 2000);
-    }
+    //ctl.attack(ctl.a2, ctl.a1);
+    setInterval(function () {
+        ctl.action();
+    }, 2000);
 };
 //# sourceMappingURL=app.js.map

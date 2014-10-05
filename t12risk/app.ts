@@ -1,10 +1,4 @@
-﻿interface CellStatic {
-    name: string;
-    team: string;
-    troops: number;
-}
-
-class Cell {
+﻿class Cell {
     private nameVal;
     private teamVal;
     private troopsVal;
@@ -47,6 +41,9 @@ class GameBoard {
     private b1tnum: HTMLElement;
     private b2tnum: HTMLElement;
 
+    private deathCountVal: number;
+    private attackCountVal: number;
+
     private getHTMLElement(elementName: string): HTMLElement {
         var element: HTMLElement;
 
@@ -74,6 +71,9 @@ class GameBoard {
     }
 
     constructor(cells: Map<string, Cell>) {
+        this.deathCountVal = 0;
+        this.attackCountVal = 0;
+
         this.a1 = document.getElementById("a1");
         this.a2 = document.getElementById("a2");
         this.b1 = document.getElementById("b1");
@@ -99,6 +99,14 @@ class GameBoard {
     updateTroops(idName: string, troops: number) {
         this.getHTMLElement(idName).innerHTML = "" + troops;
     }
+
+    incrementDC() {
+        this.deathCountVal++;
+    }
+
+    incrementAC() {
+        this.attackCountVal++;
+    }
 }
 
 class Controller {
@@ -117,23 +125,9 @@ class Controller {
         return this.command[num];
     }
 
-    private endGame(): boolean {
-        var isWinner = false;
-        var aTeam = this.cells.get("a1").team();
-
-        if (aTeam == this.cells.get("a2").team()) {
-            if (aTeam == this.cells.get("b1").team()) {
-                if (aTeam == this.cells.get("b2").team()) {
-                    isWinner = true;
-                }
-            }
-        }
-
-        return isWinner;
-    }
-
     private preformAttack(attacker: Cell, defender: Cell): boolean {
         var success: boolean;
+        this.board.incrementAC();
         while (attacker.troops() > 1 && defender.troops() > 0) {
             var attackerRoll = this.randomNumber(6, 1);
             var defenderRoll = this.randomNumber(6, 1);
@@ -145,6 +139,7 @@ class Controller {
                 defender.updateTroops(defender.troops() - 1);
                 success = true;
             }
+            this.board.incrementDC();
         }
         return success;
     }
@@ -213,6 +208,20 @@ class Controller {
         //Make a twitch object that can return the command to be executed (will be called in action())
     }
 
+    endGame(): boolean {
+        var isWinner = false;
+
+        if (this.cells.get("a1").team() === this.cells.get("a2").team()) {
+            if (this.cells.get("a1").team() === this.cells.get("b1").team()) {
+                if (this.cells.get("a1").team() === this.cells.get("b2").team()) {
+                    isWinner = true;
+                }
+            }
+        }
+
+        return isWinner;
+    }
+
     action() {
         this.actionEvent(this.fakeCommand());
     }
@@ -221,9 +230,7 @@ class Controller {
 window.onload = function () {
     var ctl = new Controller();
     //ctl.attack(ctl.a2, ctl.a1);
-    while (ctl.endGame()) {
-        setTimeout(function () { ctl.action() }, 2000);
-    }
+    setInterval(function () { ctl.action() }, 2000);
 }
 
 
