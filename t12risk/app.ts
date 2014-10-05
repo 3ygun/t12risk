@@ -134,12 +134,7 @@ class Controller {
         return winner;
     }
 
-    private actionEvent(event: string) {
-        if (event == "a") {
-            this.preformAttack(this.a1, this.a2);
 
-        }
-    }
 
     constructor() {
         this.a1 = new Cell("a1", "red", 10);

@@ -126,12 +126,6 @@ var Controller = (function () {
         return winner;
     };
 
-    Controller.prototype.actionEvent = function (event) {
-        if (event == "a") {
-            this.preformAttack(this.a1, this.a2);
-        }
-    };
-
     Controller.prototype.action = function () {
         setInterval(this.actionEvent(this.fakeCommand()), 30000);
     };
