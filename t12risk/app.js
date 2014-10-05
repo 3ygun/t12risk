@@ -28,21 +28,21 @@
 
 var GameBoard = (function () {
     function GameBoard(cells) {
-        this.a1 = document.getElementById('a1');
-        this.a2 = document.getElementById('a2');
-        this.b1 = document.getElementById('b1');
-        this.b2 = document.getElementById('b2');
+        this.a1 = document.getElementById("a1");
+        this.a2 = document.getElementById("a2");
+        this.b1 = document.getElementById("b1");
+        this.b2 = document.getElementById("b2");
 
-        this.a1tnum = document.getElementById('a1_tnum');
-        this.a2tnum = document.getElementById('a2_tnum');
-        this.b1tnum = document.getElementById('b1_tnum');
-        this.b2tnum = document.getElementById('b2_tnum');
+        this.a1tnum = document.getElementById("a1_tnum");
+        this.a2tnum = document.getElementById("a2_tnum");
+        this.b1tnum = document.getElementById("b1_tnum");
+        this.b2tnum = document.getElementById("b2_tnum");
 
         // Set the colors
-        this.a1.style.backgroundColor = cells.get('a1').team();
-        this.a2.style.backgroundColor = cells.get('a2').team();
-        this.b1.style.backgroundColor = cells.get('b1').team();
-        this.b2.style.backgroundColor = cells.get('b2').team();
+        this.a1.style.backgroundColor = cells.get("a1").team();
+        this.a2.style.backgroundColor = cells.get("a2").team();
+        this.b1.style.backgroundColor = cells.get("b1").team();
+        this.b2.style.backgroundColor = cells.get("b2").team();
     }
     GameBoard.prototype.getHTMLElement = function (elementName) {
         var element;
@@ -103,6 +103,21 @@ var Controller = (function () {
         return this.command[num];
     };
 
+    Controller.prototype.endGame = function () {
+        var isWinner = false;
+        var aTeam = this.cells.get("a1").team();
+
+        if (aTeam == this.cells.get("a2").team()) {
+            if (aTeam == this.cells.get("b1").team()) {
+                if (aTeam == this.cells.get("b2").team()) {
+                    isWinner = true;
+                }
+            }
+        }
+
+        return isWinner;
+    };
+
     Controller.prototype.preformAttack = function (attacker, defender) {
         var success;
         while (attacker.troops() > 1 && defender.troops() > 0) {
@@ -153,16 +168,22 @@ var Controller = (function () {
             defender = this.cells.get("a2");
         }
 
-        var aWin = this.preformAttack(attacker, defender);
-        if (aWin) {
-            defender.updateTeam(attacker.team());
-            defender.updateTroops(attacker.troops() - 1);
-            attacker.updateTroops(1);
-            this.board.updateColor(defender.name(), defender.team());
-        }
+        // Make sure it isn't friendly fire!8)
+        if (!(attacker.team() == defender.team())) {
+            // Add more troops
+            attacker.updateTroops(attacker.troops() + 3);
 
-        this.board.updateTroops(attacker.name(), attacker.troops());
-        this.board.updateTroops(defender.name(), defender.troops());
+            var aWin = this.preformAttack(attacker, defender);
+            if (aWin) {
+                defender.updateTeam(attacker.team());
+                defender.updateTroops(attacker.troops() - 1);
+                attacker.updateTroops(1);
+                this.board.updateColor(defender.name(), defender.team());
+            }
+
+            this.board.updateTroops(attacker.name(), attacker.troops());
+            this.board.updateTroops(defender.name(), defender.troops());
+        }
     };
 
     Controller.prototype.action = function () {
